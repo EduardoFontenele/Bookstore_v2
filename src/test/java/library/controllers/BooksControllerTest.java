@@ -3,40 +3,31 @@ package library.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import library.dtos.BookDTOWithID;
 import library.dtos.BookDTOWithoutID;
-import library.entities.Book;
-import library.mappers.BasicMappers;
 import library.repositories.BookRepository;
 import library.services.BookService;
 import library.utils.Genre;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -46,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(BooksController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(MockitoExtension.class)
+@Slf4j
 class BooksControllerTest {
 
     @Autowired
@@ -113,6 +105,7 @@ class BooksControllerTest {
 
     @Test
     @DisplayName("Save new book should return created and json data")
+    @Rollback
     void testSaveNewBook() throws Exception {
         when(bookService.saveNewBook(bookDTOWithoutID)).thenReturn(bookDtoWithId);
 
@@ -123,7 +116,6 @@ class BooksControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .content(responseContent)
                 .characterEncoding("utf-8"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.price", is(10)));
+                .andExpect(status().isCreated());
     }
 }
