@@ -55,7 +55,7 @@ class BooksControllerTest {
     ObjectMapper objectMapper = new ObjectMapper();
 
     private BookDTOWithID bookDtoWithId;
-    private BookDTOWithoutID bookDTOWithoutID;
+    private BookDTOWithoutID bookDtoWithoutId;
 
     private final List<BookDTOWithID> listOfDtosWithId = new ArrayList<>();
 
@@ -68,7 +68,7 @@ class BooksControllerTest {
                 .genre(Genre.AUTO_AJUDA)
                 .build();
 
-        bookDTOWithoutID = BookDTOWithoutID.builder()
+        bookDtoWithoutId = BookDTOWithoutID.builder()
                 .title("O Senhor dos Anéis")
                 .price(new BigDecimal("10"))
                 .genre(Genre.RELIGIAO)
@@ -78,7 +78,7 @@ class BooksControllerTest {
     }
 
     @Test
-    @DisplayName("List all books method should return ok")
+    @DisplayName("List all books method should return OK HttpStatus and JSON data")
     void testListBooks() throws Exception {
         given(bookService.listBooks()).willReturn(listOfDtosWithId);
 
@@ -86,28 +86,31 @@ class BooksControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()", is(1)));
+                .andExpect(jsonPath("$.length()", is(1)))
+                .andExpect(jsonPath("$[0].title", is(bookDtoWithId.getTitle())))
+                .andExpect(jsonPath("$[0].price", is(10)))
+                .andExpect(jsonPath("$[0].genre", is(bookDtoWithId.getGenre().toString())));
     }
 
     @Test
-    @DisplayName("Get book by id method should return ok and json data")
+    @DisplayName("Get book by id method should return OK HttpStatus and JSON data")
     void testGetBookById() throws Exception {
-        given(bookService.getBookById(any(Long.class))).willReturn(Optional.of(bookDTOWithoutID));
+        given(bookService.getBookById(any(Long.class))).willReturn(Optional.of(bookDtoWithoutId));
 
         mockMvc.perform(get("/api/books/getById/" + any(Long.class))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.title", is(bookDTOWithoutID.getTitle())))
+                .andExpect(jsonPath("$.title", is(bookDtoWithoutId.getTitle())))
                 .andExpect(jsonPath("$.price", is(10)))
-                .andExpect(jsonPath("$.genre", is(bookDTOWithoutID.getGenre().toString())));
+                .andExpect(jsonPath("$.genre", is(bookDtoWithoutId.getGenre().toString())));
     }
 
     @Test
-    @DisplayName("Save new book should return created and json data")
+    @DisplayName("Save new book should return CREATED HttpStatus")
     @Rollback
     void testSaveNewBook() throws Exception {
-        when(bookService.saveNewBook(bookDTOWithoutID)).thenReturn(bookDtoWithId);
+        when(bookService.saveNewBook(bookDtoWithoutId)).thenReturn(bookDtoWithId);
 
         String responseContent = objectMapper.writeValueAsString(bookDtoWithId);
         System.out.println("\n" + responseContent);

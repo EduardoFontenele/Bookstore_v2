@@ -11,7 +11,7 @@ import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
-public class BasicMappers {
+public class ProjectMapper {
 
     private final ModelMapper modelMapper;
 
@@ -31,7 +31,11 @@ public class BasicMappers {
         return Objects.isNull(dto) ? null : modelMapper.map(dto, BookDTOWithoutID.class);
     }
 
-    public Book BookDtoWithIDToEntity(BookDTOWithoutID dto) {
+    public Book completeBookDtoToEntity(BookDTOWithID dto) {
+        return Objects.isNull(dto) ? null : modelMapper.map(dto, Book.class);
+    }
+
+    public Book partialBookDtoToEntity(BookDTOWithoutID dto) {
         return Objects.isNull(dto) ? null : modelMapper.map(dto, Book.class);
     }
 }
