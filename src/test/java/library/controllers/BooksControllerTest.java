@@ -95,7 +95,7 @@ class BooksControllerTest {
     @Test
     @DisplayName("Get book by id method should return OK HttpStatus and JSON data")
     void testGetBookById() throws Exception {
-        given(bookService.getBookById(any(Long.class))).willReturn(Optional.of(bookDtoWithoutId));
+        given(bookService.getBookById(any(Long.class))).willReturn(bookDtoWithoutId);
 
         mockMvc.perform(get("/api/books/getById/" + any(Long.class))
                 .accept(MediaType.APPLICATION_JSON))

@@ -3,6 +3,7 @@ package library.services.impl;
 import library.dtos.BookDTOWithoutID;
 import library.dtos.BookDTOWithID;
 import library.entities.Book;
+import library.exceptions.ElementNotFoundException;
 import library.mappers.ProjectMapper;
 import library.repositories.BookRepository;
 import library.services.BookService;
@@ -34,7 +35,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<BookDTOWithoutID> getBookById(Long id) {
-        return Optional.of(projectMapper.entityToBookDtoWithoutID(bookRepository.findById(id).get()));
+    public BookDTOWithoutID getBookById(Long id) {
+        Optional<Book> searchedBook = bookRepository.findById(id);
+        if(searchedBook.isEmpty()) throw new ElementNotFoundException(String.format("Element with id %d not found", id));
+        return projectMapper.entityToBookDtoWithoutID(searchedBook.get());
     }
 }

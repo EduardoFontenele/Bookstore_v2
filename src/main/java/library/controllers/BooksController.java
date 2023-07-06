@@ -1,10 +1,10 @@
 package library.controllers;
 
-import library.dtos.BookDTOWithoutID;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import library.dtos.BookDTOWithID;
-import library.exceptions.NotFoundException;
+import library.dtos.BookDTOWithoutID;
 import library.services.BookService;
-import library.services.impl.BookServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +31,11 @@ public class BooksController {
     }
 
     @GetMapping("/getById/{id}")
-    public ResponseEntity<BookDTOWithoutID> getBookById(@PathVariable("id") Long id) {
-        if(id == null || id <= 0) new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return ResponseEntity.ok(bookService.getBookById(id).orElseThrow(NotFoundException::new));
+    public ResponseEntity<BookDTOWithoutID> getBookById(
+            @Validated
+            @Min(value = 1, message = "ID cannot be negative")
+            @PathVariable("id") Long id) {
+        // if(id <= 0) throw new RuntimeException("ID cannot be negative");
+        return ResponseEntity.ok(bookService.getBookById(id));
     }
 }
