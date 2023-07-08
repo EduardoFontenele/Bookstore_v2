@@ -1,13 +1,13 @@
 package library.services;
 
-import library.dtos.BookDTOWithID;
-import library.dtos.BookDTOWithoutID;
+import library.dtos.BookDtoWithID;
+import library.dtos.BookDtoWithoutID;
 
 import java.util.List;
 
 public interface BookService {
 
-    BookDTOWithID saveNewBook(BookDTOWithoutID dto);
-    List<BookDTOWithID> listBooks();
-    BookDTOWithoutID getBookById(Long id);
+    BookDtoWithID saveNewBook(BookDtoWithoutID dto);
+    List<BookDtoWithID> listBooks();
+    BookDtoWithoutID getBookById(Long id);
 }

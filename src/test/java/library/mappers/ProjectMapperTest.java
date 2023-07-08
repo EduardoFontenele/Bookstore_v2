@@ -1,7 +1,7 @@
 package library.mappers;
 
-import library.dtos.BookDTOWithID;
-import library.dtos.BookDTOWithoutID;
+import library.dtos.BookDtoWithID;
+import library.dtos.BookDtoWithoutID;
 import library.entities.Book;
 import library.utils.Genre;
 import org.junit.jupiter.api.*;
@@ -23,8 +23,8 @@ class ProjectMapperTest {
     ProjectMapper projectMapper;
 
     private Book entity;
-    private BookDTOWithID bookDtoWithId;
-    private BookDTOWithoutID bookDtoWithoutId;
+    private BookDtoWithID bookDtoWithId;
+    private BookDtoWithoutID bookDtoWithoutId;
     @BeforeEach
     void setUp() {
         entity = new Book(1L, "Spider-Man", new BigDecimal("28.99"), Genre.HQ);
@@ -34,7 +34,7 @@ class ProjectMapperTest {
     @DisplayName("Should transform a entity into a output DTO")
     @Order(1)
     void testModelMapper() {
-        bookDtoWithId = modelMapper.map(entity, BookDTOWithID.class);
+        bookDtoWithId = modelMapper.map(entity, BookDtoWithID.class);
 
         assertNotNull(bookDtoWithId);
         assertEquals(bookDtoWithId.getId(), entity.getId());

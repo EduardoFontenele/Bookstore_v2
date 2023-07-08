@@ -1,8 +1,8 @@
 package library.services;
 
 import library.controllers.BooksController;
-import library.dtos.BookDTOWithID;
-import library.dtos.BookDTOWithoutID;
+import library.dtos.BookDtoWithID;
+import library.dtos.BookDtoWithoutID;
 import library.entities.Book;
 import library.mappers.ProjectMapper;
 import library.repositories.BookRepository;
@@ -32,20 +32,20 @@ class BookServiceTest {
 
     private Book bookEntity;
 
-    private BookDTOWithoutID bookDtoWithoutID;
+    private BookDtoWithoutID bookDtoWithoutID;
 
-    private BookDTOWithID bookDtoWithID;
+    private BookDtoWithID bookDtoWithID;
     @BeforeEach
     void setUp() {
         bookEntity = new Book(1L, "Test", new BigDecimal("10"), Genre.ROMANCE);
 
-        bookDtoWithoutID = BookDTOWithoutID.builder()
+        bookDtoWithoutID = BookDtoWithoutID.builder()
                 .title(bookEntity.getTitle())
                 .price(bookEntity.getPrice())
                 .genre(bookEntity.getGenre())
                 .build();
 
-        bookDtoWithID = BookDTOWithID.builder()
+        bookDtoWithID = BookDtoWithID.builder()
                 .id(bookEntity.getId())
                 .title(bookEntity.getTitle())
                 .price(bookEntity.getPrice())
@@ -74,7 +74,7 @@ class BookServiceTest {
     @Test
     @DisplayName("Method 'listBooks' should return list of DTOs with ID")
     void testListBooks() {
-        List<BookDTOWithID> list = bookRepository.findAll()
+        List<BookDtoWithID> list = bookRepository.findAll()
                 .stream()
                 .map(projectMapper::entityToBookDtoWithID)
                 .toList();
@@ -85,8 +85,8 @@ class BookServiceTest {
         assertTrue(list.size() > 0);
         assertNotEquals(list.get(0), bookDtoWithID);
 
-        for(BookDTOWithID dto : list) {
-            assertEquals(dto.getClass(), BookDTOWithID.class, "DTOs should be instance of BookDTOWithID");
+        for(BookDtoWithID dto : list) {
+            assertEquals(dto.getClass(), BookDtoWithID.class, "DTOs should be instance of BookDTOWithID");
         }
     }
 
@@ -95,7 +95,7 @@ class BookServiceTest {
     void testGetBookById() {
         bookDtoWithoutID = projectMapper.entityToBookDtoWithoutID(bookRepository.findById(1l).get());
 
-        assertEquals(bookDtoWithoutID.getClass(), BookDTOWithoutID.class);
+        assertEquals(bookDtoWithoutID.getClass(), BookDtoWithoutID.class);
         assertNotNull(bookDtoWithoutID.getPrice());
         assertNotNull(bookDtoWithoutID.getTitle());
         assertNotNull(bookDtoWithoutID.getGenre());

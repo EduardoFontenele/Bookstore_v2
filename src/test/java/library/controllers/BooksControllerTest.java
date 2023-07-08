@@ -1,8 +1,8 @@
 package library.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import library.dtos.BookDTOWithID;
-import library.dtos.BookDTOWithoutID;
+import library.dtos.BookDtoWithID;
+import library.dtos.BookDtoWithoutID;
 import library.repositories.BookRepository;
 import library.services.BookService;
 import library.utils.Genre;
@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -54,21 +53,21 @@ class BooksControllerTest {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    private BookDTOWithID bookDtoWithId;
-    private BookDTOWithoutID bookDtoWithoutId;
+    private BookDtoWithID bookDtoWithId;
+    private BookDtoWithoutID bookDtoWithoutId;
 
-    private final List<BookDTOWithID> listOfDtosWithId = new ArrayList<>();
+    private final List<BookDtoWithID> listOfDtosWithId = new ArrayList<>();
 
     @BeforeEach
     public void init() {
-        bookDtoWithId = BookDTOWithID.builder()
+        bookDtoWithId = BookDtoWithID.builder()
                 .id(1L)
                 .title("O Pequeno Príncipe")
                 .price(new BigDecimal("10"))
                 .genre(Genre.AUTO_AJUDA)
                 .build();
 
-        bookDtoWithoutId = BookDTOWithoutID.builder()
+        bookDtoWithoutId = BookDtoWithoutID.builder()
                 .title("O Senhor dos Anéis")
                 .price(new BigDecimal("10"))
                 .genre(Genre.RELIGIAO)
