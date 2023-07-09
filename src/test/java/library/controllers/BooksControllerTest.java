@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
@@ -79,7 +80,7 @@ class BooksControllerTest {
     @Test
     @DisplayName("List all books method should return OK HttpStatus and JSON data")
     void testListBooks() throws Exception {
-        given(bookService.listBooks()).willReturn(listOfDtosWithId);
+        given(bookService.listBooks(0, 0)).willReturn(any());
 
         mockMvc.perform(get("/api/books/listAll")
                 .accept(MediaType.APPLICATION_JSON))

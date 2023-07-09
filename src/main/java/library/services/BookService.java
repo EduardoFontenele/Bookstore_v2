@@ -2,12 +2,13 @@ package library.services;
 
 import library.dtos.BookDtoWithID;
 import library.dtos.BookDtoWithoutID;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface BookService {
 
     BookDtoWithID saveNewBook(BookDtoWithoutID dto);
-    List<BookDtoWithID> listBooks();
+    Page<BookDtoWithID> listBooks(Integer pageNumber, Integer pageSize);
     BookDtoWithoutID getBookById(Long id);
+    void updateBook(BookDtoWithID dto);
+    void deleteBookById(Long id);
 }

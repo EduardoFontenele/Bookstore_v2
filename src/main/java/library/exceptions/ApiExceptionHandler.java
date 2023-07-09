@@ -2,6 +2,7 @@ package library.exceptions;
 
 import library.dtos.ErrorDto;
 import library.dtos.ValidationErrorDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -15,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class ApiExceptionHandler {
 
-    @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ErrorDto> handle(ApiException ex) {
@@ -34,17 +35,17 @@ public class ApiExceptionHandler {
         List<ValidationErrorDto> validations = new ArrayList<>();
 
         for (FieldError error : e.getBindingResult().getFieldErrors()) {
-            String mensagem = messageSource.getMessage(error, LocaleContextHolder.getLocale());
-            validations.add(new ValidationErrorDto(error.getField(), mensagem));
+            String message = messageSource.getMessage(error, LocaleContextHolder.getLocale());
+            validations.add(new ValidationErrorDto(error.getField(), message));
         }
 
-        ErrorsTable tabela = ErrorsTable.ELEMENT_NOT_FOUND;
-        ErrorDto erroResponseDto = new ErrorDto();
-        erroResponseDto.setHttpStatusCode(tabela.getHttpStatus().toString());
-        erroResponseDto.setErrorMessage(tabela.getErrorMessage());
+        ErrorsTable errorsTable = ErrorsTable.ELEMENT_NOT_FOUND;
+        ErrorDto errorResponseDto = new ErrorDto();
+        errorResponseDto.setHttpStatusCode(errorsTable.getHttpStatus().toString());
+        errorResponseDto.setErrorMessage(errorsTable.getErrorMessage());
 
-        erroResponseDto.setValidations(validations);
+        errorResponseDto.setValidations(validations);
 
-        return ResponseEntity.status(tabela.getHttpStatus()).body(erroResponseDto);
+        return ResponseEntity.status(errorsTable.getHttpStatus()).body(errorResponseDto);
     }
 }
